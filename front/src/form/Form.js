@@ -1,44 +1,61 @@
-import React from "react";
-import TextInput from "./TextInput";
+import React, { useState } from "react";
+import axios from "axios";
+import { useForm } from "react-hook-form";
 
-export default function Form() {
+import TextInput from "./TextInput";
+import api from "../api";
+
+export default function Form({ product }) {
+  const { register, handleSubmit, watch, errors } = useForm();
+
+  const onSubmit = (data) => {
+    const { nombre, descripcion, marca, precio } = data;
+    console.log("data", data, "errors", errors);
+    if (nombre) {
+      if (product) {
+        console.log("update");
+      } else {
+        axios.post(`${api}/products`, { nombre, descripcion, marca, precio });
+      }
+    }
+  };
   return (
     <>
       <div>
         <div class="md:grid md:grid-cols-2">
           <div class="mt-5 md:mt-0">
-            <form action="#" method="POST">
+            <form onSubmit={handleSubmit(onSubmit)}>
               <div class="shadow sm:rounded-md sm:overflow-hidden">
                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <TextInput
+                    register={register}
+                    registerParams={{ required: true, min: 4 }}
+                    errors={errors}
                     label="Nombre"
                     id="nombre"
                     placeholder="Zapatillas Running"
-                    help="Nombre del producto."
+                    required
                   />
                   <TextInput
+                    register={register}
+                    errors={errors}
                     label="Descripción"
                     id="descripcion"
                     placeholder="Modernas y livianas."
-                    help="Descripción del producto."
                   />
                   <TextInput
+                    register={register}
+                    errors={errors}
                     label="Marca"
                     id="marca"
                     placeholder="Zico"
-                    help="Marca del producto."
                   />
                   <TextInput
-                    label="Nombre"
-                    id="nombre"
-                    placeholder="Zapatillas Running"
-                    help="Nombre del producto."
-                  />
-                  <TextInput
+                    register={register}
+                    errors={errors}
                     label="Precio"
                     id="nombre"
                     placeholder="9900"
-                    help="Precio del producto."
                     type="number"
                   />
 
@@ -48,20 +65,6 @@ export default function Form() {
                     </label>
                     <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
                       <div class="space-y-1 text-center">
-                        <svg
-                          class="mx-auto h-12 w-12 text-gray-400"
-                          stroke="currentColor"
-                          fill="none"
-                          viewBox="0 0 48 48"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                            stroke-width="2"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                          />
-                        </svg>
                         <div class="flex text-sm text-gray-600">
                           <label
                             for="file-upload"
