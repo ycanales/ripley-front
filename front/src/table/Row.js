@@ -1,4 +1,6 @@
 import React from "react";
+import PropTypes from "prop-types";
+
 export const Row = ({ brand, image, name, description, price }) => {
   return (
     <tr>

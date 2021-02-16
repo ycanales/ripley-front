@@ -4,12 +4,13 @@ import Header from "./table/Header";
 import Row from "./table/Row";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import api from "./api";
 
 function App() {
   const [products, setProducts] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:3001/products");
+      const result = await axios.get(`${api}/products`);
       console.log("results", result);
       setProducts(result.data);
     };
