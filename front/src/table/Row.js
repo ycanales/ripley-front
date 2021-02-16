@@ -1,4 +1,4 @@
-export default function Row(brand, image, name, description, price) {
+export default function Row({brand, image, name, description, price}) {
     return (
         <tr>
             <td className="px-6 py-4 whitespace-nowrap">
@@ -10,10 +10,10 @@ export default function Row(brand, image, name, description, price) {
                     </div>
                     <div className="ml-4">
                         <div className="text-sm font-medium text-gray-900">
-                            Jane Cooper
+                            {name}
                         </div>
                         <div className="text-sm text-gray-500">
-                            jane.cooper@example.com
+                            {brand}
                         </div>
                     </div>
                 </div>
