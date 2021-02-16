@@ -54,7 +54,7 @@ export default function Form({ product }) {
                     register={register}
                     errors={errors}
                     label="Precio"
-                    id="nombre"
+                    id="precio"
                     placeholder="9900"
                     type="number"
                   />
