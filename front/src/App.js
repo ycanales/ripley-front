@@ -1,8 +1,9 @@
 import './App.css';
+import Nav from './Nav'
 import Header from './table/Header'
 import Row from './table/Row'
 import axios from 'axios';
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 function App() {
     const [products, setProducts] = useState([])
@@ -17,6 +18,7 @@ function App() {
     console.log('PRODUCTS', products)
     return (
         <div className="flex flex-col">
+            <Nav />
             <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
                 <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
                     <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
