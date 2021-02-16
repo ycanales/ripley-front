@@ -1,10 +1,12 @@
 import "./App.css";
-import Nav from "./Nav";
-import Header from "./table/Header";
-import Row from "./table/Row";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import api from "./api";
+
+import Form from "./form/Form";
+import Nav from "./Nav";
+import Table from "./table/Table";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   const [products, setProducts] = useState([]);
@@ -18,32 +20,19 @@ function App() {
   }, []);
   console.log("PRODUCTS", products);
   return (
-    <div className="container px-12 py-3 flex flex-col">
-      <Nav />
-      <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-        <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-          <div className="shadow overflow-hidden border-b border-gray-200 sm:rounded-lg">
-            <table className="min-w-full divide-y divide-gray-200">
-              <Header />
-              <tbody className="bg-white divide-y divide-gray-200">
-                {products.map(
-                  ({ id, marca, imagen, nombre, descripcion, precio }) => (
-                    <Row
-                      key={id}
-                      brand={marca}
-                      image={imagen}
-                      name={nombre}
-                      description={descripcion}
-                      price={precio}
-                    />
-                  )
-                )}
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <Router>
+      <div className="container px-12 py-3 flex flex-col">
+        <Nav />
+        <Switch>
+          <Route path="/new">
+            <Form />
+          </Route>
+          <Route path="/">
+            <Table products={products} />
+          </Route>
+        </Switch>
       </div>
-    </div>
+    </Router>
   );
 }
 
