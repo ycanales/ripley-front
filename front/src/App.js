@@ -10,15 +10,23 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 function App() {
   const [products, setProducts] = useState([]);
+
+  const fetchData = async () => {
+    const result = await axios.get(`${api}/products`);
+    console.log("results", result);
+    setProducts(result.data);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(`${api}/products`);
-      console.log("results", result);
-      setProducts(result.data);
-    };
     fetchData();
   }, []);
   console.log("PRODUCTS", products);
+
+  const onDelete = async (id) => {
+    await axios.delete(`${api}/products/${id}`);
+    await fetchData();
+  };
+
   return (
     <Router>
       <div className="container px-12 py-3 flex flex-col">
@@ -28,7 +36,7 @@ function App() {
             <Form />
           </Route>
           <Route path="/">
-            <Table products={products} />
+            <Table products={products} onDelete={onDelete} />
           </Route>
         </Switch>
       </div>

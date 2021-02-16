@@ -2,7 +2,7 @@ import React from "react";
 import Header from "./Header";
 import Row from "./Row";
 
-export default function Table({ products }) {
+export default function Table({ products, onDelete }) {
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -19,6 +19,7 @@ export default function Table({ products }) {
                     name={nombre}
                     description={descripcion}
                     price={precio}
+                    onDelete={() => onDelete(id)}
                   />
                 )
               )}

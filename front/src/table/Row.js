@@ -1,7 +1,8 @@
 import React from "react";
+
 import PropTypes from "prop-types";
 
-export const Row = ({ brand, image, name, description, price }) => {
+export const Row = ({ brand, image, name, description, price, onDelete }) => {
   return (
     <tr>
       <td className="px-6 py-4 whitespace-nowrap">
@@ -37,9 +38,12 @@ export const Row = ({ brand, image, name, description, price }) => {
         </a>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <a href="#" className="text-red-600 hover:text-indigo-900">
+        <button
+          onClick={onDelete}
+          className="text-red-600 hover:text-indigo-900"
+        >
           Borrar
-        </a>
+        </button>
       </td>
     </tr>
   );
