@@ -12,7 +12,7 @@ function App() {
         <Nav />
         <p className="italic mb-4">
           Con los datos existentes se puede probar búsqueda de palíndromo
-          buscando "ala".
+          buscando "ala" u "ojo".
         </p>
         <Switch>
           <Route path="/new">
