@@ -9,6 +9,7 @@ export const Row = ({
   name,
   description,
   price,
+  discountPrice,
   onDelete,
 }) => {
   return (
@@ -31,9 +32,20 @@ export const Row = ({
         <div className="text-sm text-gray-900">{brand}</div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
-          ${price}
-        </span>
+        {discountPrice ? (
+          <>
+            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+              Antes: ${price}
+            </span>
+            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+              Ahora: ${discountPrice}
+            </span>
+          </>
+        ) : (
+          <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+            ${price}
+          </span>
+        )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
         {description}

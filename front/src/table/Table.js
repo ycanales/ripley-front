@@ -111,7 +111,15 @@ export default function Table() {
             <Header />
             <tbody className="bg-white divide-y divide-gray-200">
               {products.map(
-                ({ id, marca, imagen, nombre, descripcion, precio }) => (
+                ({
+                  id,
+                  marca,
+                  imagen,
+                  nombre,
+                  descripcion,
+                  precio,
+                  precioDescuento,
+                }) => (
                   <Row
                     key={id}
                     id={id}
@@ -120,6 +128,7 @@ export default function Table() {
                     name={nombre}
                     description={descripcion}
                     price={precio}
+                    discountPrice={precioDescuento}
                     onDelete={() => onDelete(id)}
                   />
                 )
