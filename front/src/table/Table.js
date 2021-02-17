@@ -27,17 +27,24 @@ export default function Table() {
   const query = useQuery();
   const history = useHistory();
 
-  const fetchData = async (search = "") => {
-    const result = await axios.get(`${api}/products${search}`);
+  const fetchData = debounce(async (query = "") => {
+    console.log("fetchData", query);
+    let queryString = "";
+    if (query) {
+      queryString = `/?buscar=${query}`;
+      history.push(queryString);
+    }
+    const result = await axios.get(`${api}/products${queryString}`);
     console.log("results", result);
     setProducts(result.data);
-  };
+  }, 500);
 
   useEffect(() => {
-    const search = query.get("buscar");
-    if (search) {
-      setSearch(search);
-      fetchData(`?search=${search}`);
+    const buscar = query.get("buscar");
+    if (buscar) {
+      console.log("setting search", buscar);
+      setSearch(buscar);
+      fetchData(buscar);
     } else {
       fetchData();
     }
@@ -48,11 +55,24 @@ export default function Table() {
     await fetchData();
   };
 
-  const onSearch = debounce(async (e) => {
-    setSearch(e.target.value);
-    history.push(`/?buscar=${e.target.value}`);
-    await fetchData(`?search=${e.target.value}`);
-  }, 500);
+  const onSearch = async (e) => {
+    const value = e.target.value;
+    console.log("value", value);
+    setSearch(value);
+
+    // En caso de texto debe ser de 3 o mas caracteres para
+    // iniciar búsqueda, si es ID numérico siempre buscar.
+    // Tambien ejecutamos busqueda si se borra todo el input.
+    if (
+      value === "" ||
+      (value.length < 3 && !isNaN(value)) ||
+      value.length >= 3
+    ) {
+      await fetchData(value);
+    } else {
+      console.log("Aun no iniciamos busqueda");
+    }
+  };
 
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
