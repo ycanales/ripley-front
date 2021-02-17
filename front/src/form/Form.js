@@ -29,8 +29,10 @@ export default function Form() {
       if (image.files[0]) {
         formData.append("imagen", image.files[0]);
       }
-      formData.append("nombre", nombre);
-      formData.append("descripcion", descripcion);
+      nombre && formData.append("nombre", nombre);
+      descripcion && formData.append("descripcion", descripcion);
+      marca && formData.append("marca", marca);
+      precio && formData.append("precio", precio);
 
       // Si hay "id" estamos editando, de lo contrario creamos.
       const url = id ? `${api}/products/${id}/patch` : `${api}/products`;
