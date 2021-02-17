@@ -10,6 +10,10 @@ function App() {
     <Router>
       <div className="container px-12 py-3 flex flex-col">
         <Nav />
+        <p className="italic mb-4">
+          Con los datos existentes se puede probar búsqueda de palíndromo
+          buscando "ala".
+        </p>
         <Switch>
           <Route path="/new">
             <Form />
