@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import TextInput from "./TextInput";
@@ -9,6 +9,7 @@ import api from "../api";
 export default function Form() {
   const { id } = useParams();
   const { register, handleSubmit, errors, reset } = useForm();
+  const history = useHistory();
 
   useEffect(() => {
     if (id) {
@@ -19,31 +20,30 @@ export default function Form() {
     }
   }, [id]);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     const { nombre, descripcion, marca, precio } = data;
     console.log("data", data, "errors", errors);
     if (nombre) {
       const formData = new FormData();
       const image = document.querySelector("#imagen");
-      if (image) {
+      if (image.files[0]) {
         formData.append("imagen", image.files[0]);
       }
       formData.append("nombre", nombre);
       formData.append("descripcion", descripcion);
 
-      if (id) {
-        console.log("update");
-        axios.patch(`${api}/products/${id}`, formData, {
+      // Si hay "id" estamos editando, de lo contrario creamos.
+      const url = id ? `${api}/products/${id}/patch` : `${api}/products`;
+
+      try {
+        await axios.post(url, formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-      } else {
-        axios.post(`${api}/products`, formData, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        });
+        history.push("/");
+      } catch (e) {
+        console.log(e);
       }
     }
   };
