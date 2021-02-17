@@ -14,6 +14,7 @@ export default function Table({ products, onDelete }) {
                 ({ id, marca, imagen, nombre, descripcion, precio }) => (
                   <Row
                     key={id}
+                    id={id}
                     brand={marca}
                     image={imagen}
                     name={nombre}

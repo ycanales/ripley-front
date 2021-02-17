@@ -1,21 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import TextInput from "./TextInput";
 import api from "../api";
 
-export default function Form({ product }) {
-  const { register, handleSubmit, watch, errors } = useForm();
+export default function Form() {
+  const { id } = useParams();
+  const { register, handleSubmit, errors, reset } = useForm();
+
+  useEffect(() => {
+    if (id) {
+      axios.get(`${api}/products/${id}`).then((result) => {
+        console.log("(use effect) result", result);
+        reset(result.data);
+      });
+    }
+  }, [id]);
 
   const onSubmit = (data) => {
     const { nombre, descripcion, marca, precio } = data;
     console.log("data", data, "errors", errors);
     if (nombre) {
-      if (product) {
+      const formData = new FormData();
+      const image = document.querySelector("#imagen");
+      if (image) {
+        formData.append("imagen", image.files[0]);
+      }
+      formData.append("nombre", nombre);
+      formData.append("descripcion", descripcion);
+
+      if (id) {
         console.log("update");
+        axios.patch(`${api}/products/${id}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       } else {
-        axios.post(`${api}/products`, { nombre, descripcion, marca, precio });
+        axios.post(`${api}/products`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
       }
     }
   };
@@ -24,7 +52,11 @@ export default function Form({ product }) {
       <div>
         <div class="md:grid md:grid-cols-2">
           <div class="mt-5 md:mt-0">
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form
+              action={`${api}/products`}
+              onSubmit={handleSubmit(onSubmit)}
+              encType="multipart/form-data"
+            >
               <div class="shadow sm:rounded-md sm:overflow-hidden">
                 <div class="px-4 py-5 bg-white space-y-6 sm:p-6">
                   <TextInput
@@ -67,18 +99,11 @@ export default function Form({ product }) {
                       <div class="space-y-1 text-center">
                         <div class="flex text-sm text-gray-600">
                           <label
-                            for="file-upload"
+                            htmlFor="file-upload"
                             class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500"
                           >
-                            <span>Subir imagen</span>
-                            <input
-                              id="file-upload"
-                              name="file-upload"
-                              type="file"
-                              class="sr-only"
-                            />
+                            <input id="imagen" name="imagen" type="file" />
                           </label>
-                          <p class="pl-1">or arrástrela aquí</p>
                         </div>
                         <p class="text-xs text-gray-500">
                           PNG, JPG, GIF hasta 10MB

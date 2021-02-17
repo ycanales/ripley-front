@@ -1,19 +1,27 @@
 import React from "react";
-
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-export const Row = ({ brand, image, name, description, price, onDelete }) => {
+export const Row = ({
+  id,
+  brand,
+  image,
+  name,
+  description,
+  price,
+  onDelete,
+}) => {
   return (
     <tr>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
-          <div className="flex-shrink-0 h-10 w-10">
-            <img
-              className="h-10 w-10 rounded-full"
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=4&amp;w=256&amp;h=256&amp;q=60"
-              alt=""
-            />
-          </div>
+          {image ? (
+            <div className="flex-shrink-0 h-20 w-20">
+              <img className="h-20 w-20 rounded-full" src={image} alt="" />
+            </div>
+          ) : (
+            ""
+          )}
           <div className="ml-4">
             <div className="text-sm font-medium text-gray-900">{name}</div>
           </div>
@@ -31,9 +39,11 @@ export const Row = ({ brand, image, name, description, price, onDelete }) => {
         {description}
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <a href="#" className="text-indigo-600 hover:text-indigo-900">
-          Modificar
-        </a>
+        <Link to={`/edit/${id}`}>
+          <button className="text-indigo-600 hover:text-indigo-900">
+            Modificar
+          </button>
+        </Link>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
         <button

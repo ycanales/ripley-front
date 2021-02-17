@@ -35,6 +35,9 @@ function App() {
           <Route path="/new">
             <Form />
           </Route>
+          <Route path="/edit/:id">
+            <Form />
+          </Route>
           <Route path="/">
             <Table products={products} onDelete={onDelete} />
           </Route>
