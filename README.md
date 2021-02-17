@@ -4,6 +4,7 @@ Esta aplicación creada con `create-react-app` implementa las operaciones CRUD p
 
 ## Cómo correr
 
+0. Entrar a directorio `front`
 1. Instalar dependencias con `yarn`
 2. Correr de manera local con `yarn start`
 
