@@ -3,26 +3,57 @@ import Header from "./Header";
 import Row from "./Row";
 import axios from "axios";
 import api from "../api";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
+
+function useQuery() {
+  return new URLSearchParams(useLocation().search);
+}
+
+export const debounce = (func, wait) => {
+  let timeout;
+  return function (...args) {
+    const context = this;
+    if (timeout) clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      timeout = null;
+      func.apply(context, args);
+    }, wait);
+  };
+};
 
 export default function Table() {
   const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
+  const query = useQuery();
+  const history = useHistory();
 
-  const fetchData = async () => {
-    const result = await axios.get(`${api}/products`);
+  const fetchData = async (search = "") => {
+    const result = await axios.get(`${api}/products${search}`);
     console.log("results", result);
     setProducts(result.data);
   };
 
   useEffect(() => {
-    fetchData();
+    const search = query.get("buscar");
+    if (search) {
+      setSearch(search);
+      fetchData(`?search=${search}`);
+    } else {
+      fetchData();
+    }
   }, []);
-  console.log("PRODUCTS", products);
 
   const onDelete = async (id) => {
     await axios.delete(`${api}/products/${id}`);
     await fetchData();
   };
+
+  const onSearch = debounce(async (e) => {
+    setSearch(e.target.value);
+    history.push(`/?buscar=${e.target.value}`);
+    await fetchData(`?search=${e.target.value}`);
+  }, 500);
+
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
@@ -34,6 +65,8 @@ export default function Table() {
               <input
                 placeholder="Buscar"
                 className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium bg-gray-100 hover:bg-gray-10 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                onChange={onSearch}
+                value={search}
               />
             </span>
           </div>
