@@ -1,8 +1,27 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Header from "./Header";
 import Row from "./Row";
+import axios from "axios";
+import api from "../api";
 
-export default function Table({ products, onDelete }) {
+export default function Table() {
+  const [products, setProducts] = useState([]);
+
+  const fetchData = async () => {
+    const result = await axios.get(`${api}/products`);
+    console.log("results", result);
+    setProducts(result.data);
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+  console.log("PRODUCTS", products);
+
+  const onDelete = async (id) => {
+    await axios.delete(`${api}/products/${id}`);
+    await fetchData();
+  };
   return (
     <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
       <div className="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
